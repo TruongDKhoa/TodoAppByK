@@ -9,7 +9,7 @@ export default tempData = [
         todos: [
             {
                 title: "Book flight",
-                isCompleted: false
+                isCompleted: true
             },
             {
                 title: "Passport check",
@@ -61,7 +61,7 @@ export default tempData = [
             },
             {
                 title: "Reserve Hotel Room",
-                isCompleted: true
+                isCompleted: false
             },
             {
                 title: "Pack luggage",
