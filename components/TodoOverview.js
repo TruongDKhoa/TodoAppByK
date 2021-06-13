@@ -4,7 +4,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
 
-export default Todo = ({ task }) => {
+export default TodoOverview = ({ task }) => {
     const completedCount = task.todos.filter(task => task.isCompleted).length;
     const remainningCount = task.todos.length - completedCount;
 

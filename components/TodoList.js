@@ -1,16 +1,35 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import Todo from './Todo';
+import TodoOverview from './TodoOverview';
+import AddTodo from './AddTodo';
 
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
 import tempData from '../tempData';
 
 export default class App extends React.Component {
+    state = {
+        addTodoVisible: true
+    }
+
+    toggleAddTodoModal() {
+        console.log(this.state.addTodoVisible);
+        this.setState({
+            addTodoVisible: !this.state.addTodoVisible
+        })
+    }
     render() {
         return (
             <View style={styles.container}>
+                <Modal animationType="slide"
+                    visible={this.state.addTodoVisible}
+                    tranparent={true}
+                    onRequestClose={() => this.toggleAddTodoModal()}
+                >
+                    <AddTodo closeModal={() => this.toggleAddTodoModal()}></AddTodo>
+                </Modal>
+
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.divider} />
                     <Text style={styles.title}>
@@ -20,7 +39,9 @@ export default class App extends React.Component {
                 </View>
 
                 <View style={{ marginVertical: 40 }}>
-                    <TouchableOpacity style={styles.addListButton}>
+                    <TouchableOpacity style={styles.addListButton}
+                        onPress={() => this.toggleAddTodoModal()}
+                    >
                         <AntDesign name="plus" size={16} color={COLORS.Blue} />
                     </TouchableOpacity>
 
@@ -33,7 +54,7 @@ export default class App extends React.Component {
                         keyExtractor={item => item.name}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => <Todo task={item} />
+                        renderItem={({ item }) => <TodoOverview task={item} />
                         }
                     />
                 </View>
@@ -78,5 +99,19 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         fontSize: 15,
         marginTop: 10
+    },
+
+    modalContainer: {
+        borderRadius: 10,
+        width: "90%",
+        height: "90%",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+
+    modalButton: {
+        padding: 30,
+        alignItems: "center",
+        justifyContent: "center"
     }
 });
