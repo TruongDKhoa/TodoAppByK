@@ -10,15 +10,23 @@ import tempData from '../tempData';
 
 export default class App extends React.Component {
     state = {
-        addTodoVisible: true
+        addTodoVisible: false
     }
 
+    // Show/hide new todo screen
     toggleAddTodoModal() {
-        console.log(this.state.addTodoVisible);
         this.setState({
             addTodoVisible: !this.state.addTodoVisible
         })
     }
+
+    // Render todo overview list
+    renderTodoOverviewList = (task) => {
+        return (
+            <TodoOverview task={task} />
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -54,8 +62,7 @@ export default class App extends React.Component {
                         keyExtractor={item => item.name}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => <TodoOverview task={item} />
-                        }
+                        renderItem={({ item }) => this.renderTodoOverviewList(item)}
                     />
                 </View>
             </View>
