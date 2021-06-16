@@ -4,9 +4,10 @@
 
 export default tempData = [
     {
+        id: 1,
         name: "Plan a trip",
         color: "#24A6D9",
-        todos: [
+        tasks: [
             {
                 title: "Book flight",
                 isCompleted: true
@@ -26,9 +27,10 @@ export default tempData = [
         ]
     },
     {
+        id: 2,
         name: "Plan a trip 2",
         color: "#8D22D9",
-        todos: [
+        tasks: [
             {
                 title: "Book flight",
                 isCompleted: false
@@ -48,9 +50,10 @@ export default tempData = [
         ]
     },
     {
+        id: 3,
         name: "Plan a trip 3",
         color: "#595BD9",
-        todos: [
+        tasks: [
             {
                 title: "Book flight",
                 isCompleted: false

@@ -32,11 +32,8 @@ export default class AddTodo extends React.Component {
         const { name, mainColor } = this.state;
 
         // Add to Todo List.
-        tempData.push({
-            name: name,
-            color: mainColor,
-            todos: []
-        })
+        const todo = { name, color };
+        this.props.addTodo(todo)
 
         // Reset Todo Title
         this.setState({ name: "" });

@@ -1,4 +1,5 @@
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { color } from 'jimp';
 import React, { Component } from 'react'
 import {
     View, Text, SafeAreaView, TouchableOpacity, StyleSheet, FlatList, KeyboardAvoidingView, TextInput
@@ -7,60 +8,95 @@ import COLORS from '../assets/constants/colors';
 
 export default class TodoDetail extends React.Component {
     state = {
-        name: this.props.task.name,
-        color: this.props.task.color,
-        todos: this.props.task.todos
+        newTask: "",
     }
 
-    renderTaskList = task => {
+    // Check/Uncheck task to mark it is completed or not
+    onToggleTaskCompleted = index => {
+        let todo = this.props.todo;
+        todo.tasks[index].isCompleted = !todo.tasks[index].isCompleted;
+
+        this.props.updateTodo(todo);
+    }
+
+    // Create new task and add to
+    onAddNewTask = () => {
+        let todo = this.props.todo;
+        todo.tasks.push({ title: this.state.newTask, isCompleted: false });
+
+        this.props.updateTodo(todo);
+        this.setState({ newTask: "" })
+    }
+
+    renderTaskList = (task, index) => {
         return (
             <View style={styles.taskContainer}>
-                <Text>
+                <TouchableOpacity onPress={() => this.onToggleTaskCompleted(index)}>
+                    <Ionicons name={task.isCompleted ? "ios-square" : "ios-square-outline"} size={24} color={this.props.todo.color} style={{ width: 32 }} />
+                </TouchableOpacity>
+                <Text style={[
+                    styles.task,
+                    {
+                        textDecorationLine: task.isCompleted ? "line-through" : "none",
+                        color: task.isCompleted ? COLORS.Gray : COLORS.Black
+                    }]}
+                >
                     {task.title}
                 </Text>
             </View>
         )
     }
     render() {
-        const taskCount = this.state.todos.length;
-        const completedCount = this.state.todos.filter(task => task.isCompleted).length;
+        const todo = this.props.todo;
+
+        const taskCount = todo.tasks.length;
+        const completedCount = todo.tasks.filter(task => task.isCompleted).length;
 
         return (
-            <SafeAreaView style={styles.container}>
-                <TouchableOpacity
-                    style={{ position: "absolute", top: 64, right: 32, zIndex: 10 }}
-                    onPress={this.props.closeModal}
-                >
-                    <AntDesign name="close" size={24} color={COLORS.Black}></AntDesign>
-                </TouchableOpacity>
-
-                <View style={[styles.section, styles.header, { borderBottomColor: this.state.color }]}>
-                    <View>
-                        <Text style={styles.title}>{this.state.name}</Text>
-                        <Text style={styles.taskCount}>{`${completedCount} of ${taskCount} Tasks`}</Text>
-                    </View>
-                </View>
-
-                <View style={{ flex: 3, alignSelf: "stretch" }}>
-                    <FlatList
-                        data={this.state.todos}
-                        keyExtractor={item => item.name}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({ item }) => this.renderTaskList(item)}
-                        contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 64 }}
-                    ></FlatList>
-                </View>
-
-                <KeyboardAvoidingView
-                    style={[styles.footer, { flex: 1 }]}
-                    behavior="padding"
-                >
-                    <TextInput style={[styles.input, { borderColor: this.state.color }]} />
-                    <TouchableOpacity style={[styles.addTask, { backgroundColor: this.state.color }]}>
-                        <AntDesign name="plus" size={16} color={COLORS.White} />
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+                <SafeAreaView style={styles.container}>
+                    <TouchableOpacity
+                        style={{ position: "absolute", top: 64, right: 32, zIndex: 10 }}
+                        onPress={this.props.closeModal}
+                    >
+                        <AntDesign name="close" size={24} color={COLORS.Black}></AntDesign>
                     </TouchableOpacity>
-                </KeyboardAvoidingView>
-            </SafeAreaView>
+
+                    <View style={[styles.section, styles.header, { borderBottomColor: todo.color }]}>
+                        <View>
+                            <Text style={styles.title}>{todo.name}</Text>
+                            <Text style={styles.taskCount}>{`${completedCount} of ${taskCount} Tasks`}</Text>
+                        </View>
+                    </View>
+
+                    <View style={{ flex: 3, alignSelf: "stretch" }}>
+                        <FlatList
+                            data={todo.tasks}
+                            keyExtractor={item => item.name}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({ item, index }) => this.renderTaskList(item, index)}
+                            contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 64 }}
+                        ></FlatList>
+                    </View>
+
+                    <View
+                        style={[styles.footer, { flex: 1 }]}
+                        behavior="padding"
+                    >
+                        <TextInput
+                            style={[styles.input, { borderColor: todo.color }]}
+                            onChangeText={text => this.setState({ newTask: text })}
+                            value={this.state.newTask}
+                        />
+                        <TouchableOpacity
+                            style={[styles.addTask, { backgroundColor: todo.color }]}
+                            onPress={() => this.onAddNewTask()}
+                        >
+                            <AntDesign name="plus" size={16} color={COLORS.White} />
+                        </TouchableOpacity>
+                    </View>
+                </SafeAreaView>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -120,6 +156,12 @@ const styles = StyleSheet.create({
 
     taskContainer: {
         paddingVertical: 16,
-        justifyContent: "center"
+        flexDirection: "row",
+        alignItems: "center"
+    },
+
+    task: {
+        fontSize: 16,
+        fontWeight: "800"
     }
 })

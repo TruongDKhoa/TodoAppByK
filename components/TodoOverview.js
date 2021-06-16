@@ -16,10 +16,10 @@ export default class TodoOverview extends React.Component {
         })
     }
     render() {
-        const task = this.props.task;
+        const todo = this.props.todo;
 
-        const completedCount = task.todos.filter(task => task.isCompleted).length;
-        const remainningCount = task.todos.length - completedCount;
+        const completedCount = todo.tasks.filter(task => task.isCompleted).length;
+        const remainningCount = todo.tasks.length - completedCount;
 
         return (
             <View>
@@ -27,14 +27,18 @@ export default class TodoOverview extends React.Component {
                     visible={this.state.isShowTaskList}
                     onRequestClose={() => this.toggleShowTaskList()}
                 >
-                    <TodoDetail task={task} closeModal={() => this.toggleShowTaskList()} />
+                    <TodoDetail
+                        todo={todo}
+                        closeModal={() => this.toggleShowTaskList()}
+                        updateTodo={this.props.updateTodo}
+                    />
                 </Modal>
 
-                <TouchableOpacity style={[styles.listContainer, { backgroundColor: task.color }]}
+                <TouchableOpacity style={[styles.listContainer, { backgroundColor: todo.color }]}
                     onPress={() => this.toggleShowTaskList()}
                 >
                     <Text style={styles.listTitle} numberOfLines={1}>
-                        {task.name}
+                        {todo.name}
                     </Text>
 
                     <View style={{ marginTop: 15 }}>

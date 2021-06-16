@@ -7,10 +7,12 @@ import AddTodo from './AddTodo';
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
 import tempData from '../tempData';
+import { to } from 'color-string';
 
 export default class App extends React.Component {
     state = {
-        addTodoVisible: false
+        addTodoVisible: false,
+        todoLists: tempData
     }
 
     // Show/hide new todo screen
@@ -21,12 +23,27 @@ export default class App extends React.Component {
     }
 
     // Render todo overview list
-    renderTodoOverviewList = (task) => {
+    renderTodoOverviewList = (todo) => {
         return (
-            <TodoOverview task={task} />
+            <TodoOverview todo={todo} updateTodo={this.updateTodo} />
         )
     }
 
+    // Add new todo from availale todoLists with inscrease id and empty tasks list
+    addTodo = todo => {
+        this.setState({
+            todoLists: [
+                ...this.state.todoLists,
+                { ...todo, id: this.state.todoLists.length + 1, tasks: [] }
+            ]
+        });
+    }
+
+    updateTodo = todo => {
+        this.setState({
+            todoLists: this.state.todoLists.map(todoItem => todo.id === todoItem ? todo : todoItem)
+        })
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -35,7 +52,7 @@ export default class App extends React.Component {
                     tranparent={true}
                     onRequestClose={() => this.toggleAddTodoModal()}
                 >
-                    <AddTodo closeModal={() => this.toggleAddTodoModal()}></AddTodo>
+                    <AddTodo closeModal={() => this.toggleAddTodoModal()} addTodo={this.addTodo}></AddTodo>
                 </Modal>
 
                 <View style={{ flexDirection: 'row' }}>
@@ -58,10 +75,11 @@ export default class App extends React.Component {
 
                 <View style={{ height: 275, paddingLeft: 30 }}>
                     <FlatList
-                        data={tempData}
+                        data={this.state.todoLists}
                         keyExtractor={item => item.name}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
+                        keyboardShouldPersistTaps="always"
                         renderItem={({ item }) => this.renderTodoOverviewList(item)}
                     />
                 </View>
