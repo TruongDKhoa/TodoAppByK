@@ -8,11 +8,23 @@ import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
 import tempData from '../tempData';
 import { to } from 'color-string';
+import FireBase from '../core/firebaseConfig';
 
 export default class App extends React.Component {
     state = {
         addTodoVisible: false,
-        todoLists: tempData
+        todoLists: tempData,
+        user: {}
+    }
+
+    componentDidMount() {
+        firebase = new FireBase((error, user) => {
+            if (error) {
+                return alert('Oops, something went wrong mann!');
+            }
+
+            this.setState({ user: uid })
+        })
     }
 
     // Show/hide new todo screen
