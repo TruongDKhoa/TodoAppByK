@@ -1,8 +1,8 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import TodoOverview from './TodoOverview';
-import AddTodo from './AddTodo';
+import TodoOverview from './todoOverview';
+import AddTodo from './addTodo';
 
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';

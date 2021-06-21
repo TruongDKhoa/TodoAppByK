@@ -1,13 +1,19 @@
 //
 //  Define Todo Services
 //
+import todoApi from "../shared/api/todoApi";
 
 const todoServices = {
+    // Get all todo List
     async getTodoList() {
-        const response = await fetch("https://json-server-todoappbyk.herokuapp.com/todoLists");
-        const result = await response.json();
-
-        return result;
+        // try {
+        //     const response = await todoApi.getTodoList();
+        //     return response;
+        // } catch (error) {
+        //     throw (error);
+        // }
+        const response = await todoApi.getTodoList();
+        return response;
     },
 
     getTodoDetail(id) {

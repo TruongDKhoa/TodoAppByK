@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
-import TodoDetail from '../components/TodoDetail';
+import TodoDetail from './todoDetail';
 
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
