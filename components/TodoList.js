@@ -6,25 +6,15 @@ import AddTodo from './AddTodo';
 
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
-import tempData from '../tempData';
-import { to } from 'color-string';
-import FireBase from '../core/firebaseConfig';
 
-export default class App extends React.Component {
+export default class TodoList extends React.Component {
     state = {
-        addTodoVisible: false,
-        todoLists: tempData,
-        user: {}
+        addTodoVisible: false
     }
 
     componentDidMount() {
-        firebase = new FireBase((error, user) => {
-            if (error) {
-                return alert('Oops, something went wrong mann!');
-            }
-
-            this.setState({ user: uid })
-        })
+        // Get todo list
+        this.props.getTodoList();
     }
 
     // Show/hide new todo screen
@@ -42,21 +32,23 @@ export default class App extends React.Component {
     }
 
     // Add new todo from availale todoLists with inscrease id and empty tasks list
-    addTodo = todo => {
-        this.setState({
-            todoLists: [
-                ...this.state.todoLists,
-                { ...todo, id: this.state.todoLists.length + 1, tasks: [] }
-            ]
-        });
-    }
+    // addTodo = todo => {
+    //     this.setState({
+    //         todoLists: [
+    //             ...this.state.todoLists,
+    //             { ...todo, id: this.state.todoLists.length + 1, tasks: [] }
+    //         ]
+    //     });
+    // }
 
-    updateTodo = todo => {
-        this.setState({
-            todoLists: this.state.todoLists.map(todoItem => todo.id === todoItem ? todo : todoItem)
-        })
-    }
+    // updateTodo = todo => {
+    //     this.setState({
+    //         todoLists: this.state.todoLists.map(todoItem => todo.id === todoItem ? todo : todoItem)
+    //     })
+    // }
     render() {
+        const { todoList } = this.props;
+        console.log(todoList)
         return (
             <View style={styles.container}>
                 <Modal animationType="slide"
@@ -87,7 +79,7 @@ export default class App extends React.Component {
 
                 <View style={{ height: 275, paddingLeft: 30 }}>
                     <FlatList
-                        data={this.state.todoLists}
+                        data={todoList}
                         keyExtractor={item => item.name}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}

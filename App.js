@@ -1,8 +1,15 @@
 import React from 'react';
-import TodoList from './components/TodoList';
+import { Provider } from 'react-redux';
+
+import TodoListContainer from './containers/TodoListContainer';
+import configureStore from './store/configureStore';
+
+const store = configureStore({});
 
 export default function App() {
   return (
-    <TodoList />
+    <Provider store={store}>
+      <TodoListContainer />
+    </Provider>
   );
 }
