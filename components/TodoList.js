@@ -31,21 +31,6 @@ export default class TodoList extends React.Component {
         )
     }
 
-    // Add new todo from availale todoLists with inscrease id and empty tasks list
-    // addTodo = todo => {
-    //     this.setState({
-    //         todoLists: [
-    //             ...this.state.todoLists,
-    //             { ...todo, id: this.state.todoLists.length + 1, tasks: [] }
-    //         ]
-    //     });
-    // }
-
-    // updateTodo = todo => {
-    //     this.setState({
-    //         todoLists: this.state.todoLists.map(todoItem => todo.id === todoItem ? todo : todoItem)
-    //     })
-    // }
     render() {
         const { todoList } = this.props;
         console.log(todoList)
@@ -56,7 +41,7 @@ export default class TodoList extends React.Component {
                     tranparent={true}
                     onRequestClose={() => this.toggleAddTodoModal()}
                 >
-                    <AddTodo closeModal={() => this.toggleAddTodoModal()} addTodo={this.addTodo}></AddTodo>
+                    <AddTodo closeModal={() => this.toggleAddTodoModal()}></AddTodo>
                 </Modal>
 
                 <View style={{ flexDirection: 'row' }}>
@@ -77,7 +62,7 @@ export default class TodoList extends React.Component {
                     <Text style={styles.addLabel}>{LABELS.AddList}</Text>
                 </View>
 
-                <View style={{ height: 275, paddingLeft: 30 }}>
+                <View style={{ height: 275, paddingLeft: 28 }}>
                     <FlatList
                         data={todoList}
                         keyExtractor={item => item.name}

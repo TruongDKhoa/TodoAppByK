@@ -5,7 +5,6 @@ import { AntDesign } from '@expo/vector-icons';
 import { KeyboardAvoidingView, TouchableOpacity, StyleSheet, View, Text, TextInput } from 'react-native'
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
-import tempData from '../tempData';
 
 export default class AddTodo extends React.Component {
     // Color list to set for a todo list
@@ -40,6 +39,22 @@ export default class AddTodo extends React.Component {
         // Close modal and back to Overview screen.
         this.props.closeModal();
     }
+
+    // Add new todo from availale todoLists with inscrease id and empty tasks list
+    // addTodo = todo => {
+    //     this.setState({
+    //         todoLists: [
+    //             ...this.state.todoLists,
+    //             { ...todo, id: this.state.todoLists.length + 1, tasks: [] }
+    //         ]
+    //     });
+    // }
+
+    // updateTodo = todo => {
+    //     this.setState({
+    //         todoLists: this.state.todoLists.map(todoItem => todo.id === todoItem ? todo : todoItem)
+    //     })
+    // }
     render() {
         return (
             <KeyboardAvoidingView style={styles.container}>
