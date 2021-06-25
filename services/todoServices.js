@@ -16,8 +16,16 @@ const todoServices = {
         return response;
     },
 
-    getTodoDetail(id) {
-        console.log('gettododetail service', id);
+    async addNewTodo(todo) {
+        console.log('addNewTodo service', todo);
+        const newTodoModel = {
+            name: todo.name,
+            color: todo.mainColor,
+            tasks: []
+        }
+
+        const response = await todoApi.addNewTodo(newTodoModel);
+        return response;
     }
 }
 

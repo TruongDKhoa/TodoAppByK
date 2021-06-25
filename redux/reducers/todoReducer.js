@@ -8,6 +8,12 @@ const TodoReducer = (state = [], action) => {
             return [...state];
         }
 
+        case Types.ADD_NEW_TODO: {
+            const newTodo = action.payload;
+
+            return [...state, newTodo];
+        }
+
         default:
             return [...state];
     }

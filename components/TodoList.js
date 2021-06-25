@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import TodoOverview from './todoOverview';
-import AddTodo from './addTodo';
+import AddTodoContainer from '../redux/containers/addTodoContainer';
 
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
@@ -25,15 +25,11 @@ export default class TodoList extends React.Component {
     }
 
     // Render todo overview list
-    renderTodoOverviewList = (todo) => {
-        return (
-            <TodoOverview todo={todo} updateTodo={this.updateTodo} />
-        )
-    }
+    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} updateTodo={this.updateTodo} />;
 
     render() {
         const { todoList } = this.props;
-        console.log(todoList)
+
         return (
             <View style={styles.container}>
                 <Modal animationType="slide"
@@ -41,7 +37,7 @@ export default class TodoList extends React.Component {
                     tranparent={true}
                     onRequestClose={() => this.toggleAddTodoModal()}
                 >
-                    <AddTodo closeModal={() => this.toggleAddTodoModal()}></AddTodo>
+                    <AddTodoContainer closeModal={() => this.toggleAddTodoModal()} />
                 </Modal>
 
                 <View style={{ flexDirection: 'row' }}>

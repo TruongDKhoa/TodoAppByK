@@ -31,8 +31,8 @@ export default class AddTodo extends React.Component {
         const { name, mainColor } = this.state;
 
         // Add to Todo List.
-        const todo = { name, color };
-        this.props.addTodo(todo)
+        const todo = { name, mainColor };
+        this.props.addNewTodo(todo)
 
         // Reset Todo Title
         this.setState({ name: "" });
@@ -40,21 +40,6 @@ export default class AddTodo extends React.Component {
         this.props.closeModal();
     }
 
-    // Add new todo from availale todoLists with inscrease id and empty tasks list
-    // addTodo = todo => {
-    //     this.setState({
-    //         todoLists: [
-    //             ...this.state.todoLists,
-    //             { ...todo, id: this.state.todoLists.length + 1, tasks: [] }
-    //         ]
-    //     });
-    // }
-
-    // updateTodo = todo => {
-    //     this.setState({
-    //         todoLists: this.state.todoLists.map(todoItem => todo.id === todoItem ? todo : todoItem)
-    //     })
-    // }
     render() {
         return (
             <KeyboardAvoidingView style={styles.container}>
@@ -69,6 +54,7 @@ export default class AddTodo extends React.Component {
 
                     <TextInput style={[styles.input, { borderColor: this.state.mainColor }]}
                         placeholder={LABELS.TodoTitle}
+                        value={this.state.name}
                         onChangeText={(text) => this.setState({ name: text })}
                     />
 
