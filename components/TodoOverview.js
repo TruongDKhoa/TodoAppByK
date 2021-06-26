@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
 import TodoDetailContainer from '../redux/containers/todoDetailContainer';
+import { AntDesign } from '@expo/vector-icons';
+import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
 
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
@@ -15,6 +16,9 @@ export default class TodoOverview extends React.Component {
             isShowTaskList: !this.state.isShowTaskList
         })
     }
+
+    //onClickDelete = (id) => (event) => this.props.deleteTodo(id);
+
     render() {
         const { todo } = this.props;
         const completedCount = todo.tasks.filter(task => task.isCompleted).length;
@@ -35,6 +39,16 @@ export default class TodoOverview extends React.Component {
                 <TouchableOpacity style={[styles.listContainer, { backgroundColor: todo.color }]}
                     onPress={() => this.toggleShowTaskList()}
                 >
+                    <View style={{
+                        position: 'absolute',
+                        right: 15,
+                        top: 15
+                    }}>
+                        <TouchableOpacity onPress={() => this.props.deleteTodo(todo.id)}>
+                            <AntDesign name="close" size={24} color={COLORS.White} />
+                        </TouchableOpacity>
+                    </View>
+
                     <Text style={styles.listTitle} numberOfLines={1}>
                         {todo.name}
                     </Text>

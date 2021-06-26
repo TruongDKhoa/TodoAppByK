@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { actGetTodoListsRequest } from '../actions/todoAction';
+import { actDeleteTodoRequest, actGetTodoListsRequest } from '../actions/todoAction';
 import TodoList from '../../components/todoList';
 
 const mapStateToProps = (state) => {
@@ -12,6 +12,10 @@ const mapDispatchToProps = (dispatch, prop) => {
     return {
         getTodoList: () => {
             dispatch(actGetTodoListsRequest())
+        },
+
+        deleteTodo: (id) => {
+            dispatch(actDeleteTodoRequest(id))
         }
     }
 }

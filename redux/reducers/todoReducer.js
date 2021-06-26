@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import * as Types from '../contants/action-types';
 
 const TodoReducer = (state = [], action) => {
@@ -24,7 +25,28 @@ const TodoReducer = (state = [], action) => {
                 }
             });
 
-            return updatedTodo;
+            return [...updatedTodo];
+        }
+
+        case Types.UPDATE_TODO: {
+            const updatedTodo = action.payload;
+            // Update todo in store
+            state.forEach(todoItem => {
+                if (todoItem.id === updatedTodo.id) {
+                    todoItem = updatedTodo;
+                }
+            });
+
+            return [...updatedTodo];
+        }
+
+        case Types.DELETE_TODO: {
+            const { id, isSuccess } = action.payload;
+            state = state.filter(todoItem => todoItem.id !== id);
+            if (isSuccess) {
+                Alert('Delete Successfully!');
+            }
+            return [...state];
         }
 
         default:

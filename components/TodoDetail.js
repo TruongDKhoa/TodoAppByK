@@ -1,5 +1,4 @@
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { color } from 'jimp';
 import React, { Component } from 'react'
 import {
     View, Text, SafeAreaView, TouchableOpacity, StyleSheet, FlatList, KeyboardAvoidingView, TextInput
@@ -15,6 +14,8 @@ export default class TodoDetail extends React.Component {
     onToggleTaskCompleted = index => {
         let todo = this.props.todo;
         todo.tasks[index].isCompleted = !todo.tasks[index].isCompleted;
+        // Request Update Todo
+        this.props.updateTodo(todo.id, todo);
     }
 
     // Create new task and add to
@@ -22,6 +23,7 @@ export default class TodoDetail extends React.Component {
         let todo = this.props.todo;
         todo.tasks.push({ title: this.state.newTask, isCompleted: false });
 
+        // Request Update Todo
         this.props.updateTodo(todo.id, todo);
         this.setState({ newTask: "" })
     }

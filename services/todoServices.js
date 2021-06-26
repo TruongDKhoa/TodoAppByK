@@ -28,9 +28,20 @@ const todoServices = {
         return response;
     },
 
+    // Update a todo
     async updateTodo(id, todo) {
         const response = await todoApi.updateTodo(id, todo);
         return response;
+    },
+
+    // Delete a todo
+    async deleteTodo(id) {
+        try {
+            const response = await todoApi.deleteTodo(id);
+            return response;
+        } catch (error) {
+            throw (error)
+        }
     }
 
 }

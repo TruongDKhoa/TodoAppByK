@@ -17,6 +17,11 @@ export default class TodoList extends React.Component {
         this.props.getTodoList();
     }
 
+    deleteTodo(id) {
+        console.log('asadas', id);
+        //     this.props.deleteTodo(id);
+    }
+
     // Show/hide new todo screen
     toggleAddTodoModal() {
         this.setState({
@@ -25,7 +30,7 @@ export default class TodoList extends React.Component {
     }
 
     // Render todo overview list
-    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} />;
+    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} deleteTodo={this.deleteTodo} />;
 
     render() {
         const { todoList } = this.props;

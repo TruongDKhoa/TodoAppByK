@@ -12,6 +12,10 @@ const todoApi = {
 
     updateTodo: (id, todo) => {
         return axiosClient.put(`${url}/${id}`, todo);
+    },
+
+    deleteTodo: (id) => {
+        return axiosClient.delete(`${url}/${id}`)
     }
 }
 
