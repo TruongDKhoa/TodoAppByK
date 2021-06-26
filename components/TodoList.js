@@ -18,8 +18,8 @@ export default class TodoList extends React.Component {
     }
 
     deleteTodo(id) {
-        console.log('asadas', id);
-        //     this.props.deleteTodo(id);
+        console.log(id);
+        this.props.deleteTodo(id);
     }
 
     // Show/hide new todo screen
