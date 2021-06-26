@@ -16,8 +16,8 @@ const todoServices = {
         return response;
     },
 
+    // Add new todo
     async addNewTodo(todo) {
-        console.log('addNewTodo service', todo);
         const newTodoModel = {
             name: todo.name,
             color: todo.mainColor,
@@ -26,7 +26,13 @@ const todoServices = {
 
         const response = await todoApi.addNewTodo(newTodoModel);
         return response;
+    },
+
+    async updateTodo(id, todo) {
+        const response = await todoApi.updateTodo(id, todo);
+        return response;
     }
+
 }
 
 export default todoServices;

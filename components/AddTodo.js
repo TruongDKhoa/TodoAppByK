@@ -29,9 +29,10 @@ export default class AddTodo extends React.Component {
     // Create a new Todo
     createTodo = () => {
         const { name, mainColor } = this.state;
-
         // Add to Todo List.
         const todo = { name, mainColor };
+
+        // Dispatch action Add Todo
         this.props.addNewTodo(todo)
 
         // Reset Todo Title

@@ -9,9 +9,22 @@ const TodoReducer = (state = [], action) => {
         }
 
         case Types.ADD_NEW_TODO: {
+            console.log('ADD NEW TODO: ', state);
             const newTodo = action.payload;
 
             return [...state, newTodo];
+        }
+
+        case Types.UPDATE_TODO: {
+            const updatedTodo = action.payload;
+            // Update task
+            state.forEach(todoItem => {
+                if (todoItem.id === updatedTodo.id) {
+                    todoItem = updatedTodo;
+                }
+            });
+
+            return updatedTodo;
         }
 
         default:

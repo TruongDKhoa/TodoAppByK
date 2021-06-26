@@ -9,9 +9,7 @@ export const actGetTodoListsRequest = () => {
         return dispatch(actGetTodoLists(res));
     }
 }
-
 export const actGetTodoLists = (todoList) => {
-    console.log('action todolist')
     return {
         type: Types.GET_TODO_LIST,
         payload: todoList
@@ -28,9 +26,23 @@ export const actAddNewTodoRequest = (todo) => {
     }
 }
 export const actAddNewTodo = (todo) => {
-    console.log('actAddNewTodo');
     return {
         type: Types.ADD_NEW_TODO,
         payload: todo
+    }
+}
+
+// Action: Update task list
+export const actUpdateTodoRequest = (id, todo) => {
+    return async (dispatch) => {
+        const res = await todoServices.updateTodo(id, todo)
+
+        return dispatch(actUpdateTodo(res));
+    }
+}
+export const actUpdateTodo = (updatedTodo) => {
+    return {
+        type: Types.UPDATE_TODO,
+        payload: updatedTodo
     }
 }

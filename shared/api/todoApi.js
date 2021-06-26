@@ -8,6 +8,10 @@ const todoApi = {
 
     addNewTodo: (todo) => {
         return axiosClient.post(url, todo)
+    },
+
+    updateTodo: (id, todo) => {
+        return axiosClient.put(`${url}/${id}`, todo);
     }
 }
 

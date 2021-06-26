@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
-import TodoDetail from './todoDetail';
+import TodoDetailContainer from '../redux/containers/todoDetailContainer';
 
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
@@ -16,8 +16,7 @@ export default class TodoOverview extends React.Component {
         })
     }
     render() {
-        const todo = this.props.todo;
-
+        const { todo } = this.props;
         const completedCount = todo.tasks.filter(task => task.isCompleted).length;
         const remainningCount = todo.tasks.length - completedCount;
 
@@ -27,10 +26,9 @@ export default class TodoOverview extends React.Component {
                     visible={this.state.isShowTaskList}
                     onRequestClose={() => this.toggleShowTaskList()}
                 >
-                    <TodoDetail
+                    <TodoDetailContainer
                         todo={todo}
                         closeModal={() => this.toggleShowTaskList()}
-                        updateTodo={this.props.updateTodo}
                     />
                 </Modal>
 

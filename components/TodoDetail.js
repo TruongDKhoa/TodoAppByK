@@ -15,8 +15,6 @@ export default class TodoDetail extends React.Component {
     onToggleTaskCompleted = index => {
         let todo = this.props.todo;
         todo.tasks[index].isCompleted = !todo.tasks[index].isCompleted;
-
-        this.props.updateTodo(todo);
     }
 
     // Create new task and add to
@@ -24,7 +22,7 @@ export default class TodoDetail extends React.Component {
         let todo = this.props.todo;
         todo.tasks.push({ title: this.state.newTask, isCompleted: false });
 
-        this.props.updateTodo(todo);
+        this.props.updateTodo(todo.id, todo);
         this.setState({ newTask: "" })
     }
 
@@ -48,7 +46,6 @@ export default class TodoDetail extends React.Component {
     }
     render() {
         const todo = this.props.todo;
-
         const taskCount = todo.tasks.length;
         const completedCount = todo.tasks.filter(task => task.isCompleted).length;
 

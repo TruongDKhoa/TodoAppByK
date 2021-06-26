@@ -25,7 +25,7 @@ export default class TodoList extends React.Component {
     }
 
     // Render todo overview list
-    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} updateTodo={this.updateTodo} />;
+    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} />;
 
     render() {
         const { todoList } = this.props;
