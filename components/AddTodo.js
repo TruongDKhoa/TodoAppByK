@@ -1,10 +1,10 @@
 
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons';
-
 import { KeyboardAvoidingView, TouchableOpacity, StyleSheet, View, Text, TextInput } from 'react-native'
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class AddTodo extends React.Component {
     // Color list to set for a todo list
@@ -27,13 +27,13 @@ export default class AddTodo extends React.Component {
     }
 
     // Create a new Todo
-    createTodo = () => {
+    createTodo = async () => {
         const { name, mainColor } = this.state;
         // Add to Todo List.
         const todo = { name, mainColor };
 
         // Dispatch action Add Todo
-        this.props.addNewTodo(todo)
+        await this.props.addNewTodo(todo)
 
         // Reset Todo Title
         this.setState({ name: "" });
@@ -42,8 +42,16 @@ export default class AddTodo extends React.Component {
     }
 
     render() {
+        const { isLoading } = this.props;
+        console.log('add: ', isLoading);
+
         return (
             <KeyboardAvoidingView style={styles.container}>
+                <Spinner
+                    visible={isLoading}
+                    textStyle={{ color: COLORS.White }}
+                />
+
                 <TouchableOpacity style={styles.xButton}
                     onPress={this.props.closeModal}
                 >

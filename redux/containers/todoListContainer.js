@@ -4,7 +4,9 @@ import TodoList from '../../components/todoList';
 
 const mapStateToProps = (state) => {
     return {
-        todoList: state.TodoReducer
+        todoList: state.TodoReducer.data,
+        isLoading: state.TodoReducer.isLoading,
+        error: state.TodoReducer.error
     }
 }
 

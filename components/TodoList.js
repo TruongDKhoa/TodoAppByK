@@ -3,9 +3,9 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable } 
 import { AntDesign } from '@expo/vector-icons';
 import TodoOverview from './todoOverview';
 import AddTodoContainer from '../redux/containers/addTodoContainer';
-
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class TodoList extends React.Component {
     state = {
@@ -17,32 +17,38 @@ export default class TodoList extends React.Component {
         this.props.getTodoList();
     }
 
-    deleteTodo(id) {
-        console.log(id);
+    // Delete a todo
+    onDeleteTodo = (id) => {
         this.props.deleteTodo(id);
     }
 
     // Show/hide new todo screen
-    toggleAddTodoModal() {
+    onToggleAddTodoModal() {
         this.setState({
             addTodoVisible: !this.state.addTodoVisible
         })
     }
 
     // Render todo overview list
-    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} deleteTodo={this.deleteTodo} />;
+    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} deleteTodo={this.onDeleteTodo} />;
 
     render() {
-        const { todoList } = this.props;
+        const { todoList, isLoading } = this.props;
+        console.log('list: ', isLoading);
 
         return (
             <View style={styles.container}>
+                <Spinner
+                    visible={isLoading}
+                    textStyle={{ color: COLORS.White }}
+                />
+
                 <Modal animationType="slide"
                     visible={this.state.addTodoVisible}
                     tranparent={true}
-                    onRequestClose={() => this.toggleAddTodoModal()}
+                    onRequestClose={() => this.onToggleAddTodoModal()}
                 >
-                    <AddTodoContainer closeModal={() => this.toggleAddTodoModal()} />
+                    <AddTodoContainer closeModal={() => this.onToggleAddTodoModal()} />
                 </Modal>
 
                 <View style={{ flexDirection: 'row' }}>
@@ -55,7 +61,7 @@ export default class TodoList extends React.Component {
 
                 <View style={{ marginVertical: 40 }}>
                     <TouchableOpacity style={styles.addListButton}
-                        onPress={() => this.toggleAddTodoModal()}
+                        onPress={() => this.onToggleAddTodoModal()}
                     >
                         <AntDesign name="plus" size={16} color={COLORS.Blue} />
                     </TouchableOpacity>

@@ -2,8 +2,9 @@
  * Define actions type
  */
 
-export const FETCH_DATA_SUCCESS = 'FETCH_DATA_SUCCESS';
-export const FETCH_DATA_ERROR = 'FETCH_DATA_ERROR';
+export const REQUEST_DATA_LOADING = 'REQUEST_DATA_LOADING';
+export const REQUEST_DATA_SUCCESS = 'REQUEST_DATA_SUCCESS';
+export const REQUEST_DATA_FAILURE = 'REQUEST_DATA_FAILURE';
 
 export const GET_TODO_LIST = 'GET_TODO_LIST';
 export const ADD_NEW_TODO = 'ADD_NEW_TODO';

@@ -44,7 +44,7 @@ export default class TodoOverview extends React.Component {
                         right: 15,
                         top: 15
                     }}>
-                        <TouchableOpacity onPress={() => this.props.deleteTodo(todo.id)}>
+                        <TouchableOpacity onPress={() => { this.props.deleteTodo(todo.id) }}>
                             <AntDesign name="close" size={24} color={COLORS.White} />
                         </TouchableOpacity>
                     </View>

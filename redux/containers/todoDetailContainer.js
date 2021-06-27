@@ -5,7 +5,8 @@ import { actUpdateTodoRequest } from '../actions/todoAction';
 const mapStateToProps = (state, ownProps) => {
     return {
         todo: ownProps.todo,
-        ownTodo: ownProps
+        isLoading: state.TodoReducer.isLoading,
+        error: state.TodoReducer.error
     }
 }
 

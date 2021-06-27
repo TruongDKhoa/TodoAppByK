@@ -19,12 +19,12 @@ export default class TodoDetail extends React.Component {
     }
 
     // Create new task and add to
-    onAddNewTask = () => {
+    onAddNewTask = async () => {
         let todo = this.props.todo;
         todo.tasks.push({ title: this.state.newTask, isCompleted: false });
 
         // Request Update Todo
-        this.props.updateTodo(todo.id, todo);
+        await this.props.updateTodo(todo.id, todo);
         this.setState({ newTask: "" })
     }
 

@@ -1,13 +1,19 @@
 import * as Types from '../contants/action-types';
 import todoServices from '../../services/todoServices';
 import * as _ from 'lodash';
+import { requestDataLoading, requestDataFailure } from './baseAction';
 
 // Action: Get all todo list.
 export const actGetTodoListsRequest = () => {
     return async (dispatch) => {
+        dispatch(requestDataLoading());
         const res = await todoServices.getTodoList();
 
-        return dispatch(actGetTodoLists(res));
+        if (res && res.length > 0) {
+            return dispatch(actGetTodoLists(res));
+        } else {
+            return dispatch(requestDataFailure());
+        }
     }
 }
 export const actGetTodoLists = (todoList) => {
@@ -17,13 +23,17 @@ export const actGetTodoLists = (todoList) => {
     }
 }
 
-
 // Action: Add new todo.
 export const actAddNewTodoRequest = (todo) => {
     return async (dispatch) => {
+        dispatch(requestDataLoading());
         const res = await todoServices.addNewTodo(todo);
 
-        return dispatch(actAddNewTodo(res));
+        if (!_.isEmpty(res)) {
+            return dispatch(actAddNewTodo(res));
+        } else {
+            return dispatch(requestDataFailure());
+        }
     }
 }
 export const actAddNewTodo = (todo) => {
@@ -36,9 +46,14 @@ export const actAddNewTodo = (todo) => {
 // Action: Update task list
 export const actUpdateTodoRequest = (id, todo) => {
     return async (dispatch) => {
+        dispatch(requestDataLoading());
         const res = await todoServices.updateTodo(id, todo)
 
-        return dispatch(actUpdateTodo(res));
+        if (res && res.length > 0) {
+            return dispatch(actUpdateTodo(res));
+        } else {
+            return dispatch(requestDataFailure());
+        }
     }
 }
 export const actUpdateTodo = (updatedTodo) => {
@@ -51,8 +66,14 @@ export const actUpdateTodo = (updatedTodo) => {
 // Action: Delete a todo
 export const actDeleteTodoRequest = (id) => {
     return async (dispatch) => {
+        dispatch(requestDataLoading());
         const res = await todoServices.deleteTodo(id);
-        return dispatch(actDeleteTodo(id, res));
+
+        if (_.isEmpty(res)) {
+            return dispatch(actDeleteTodo(id, res));
+        } else {
+            return dispatch(requestDataFailure());
+        }
     }
 }
 export const actDeleteTodo = (id, res) => {
