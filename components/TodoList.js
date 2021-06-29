@@ -34,7 +34,6 @@ export default class TodoList extends React.Component {
 
     render() {
         const { todoList, isLoading } = this.props;
-        console.log('list: ', isLoading);
 
         return (
             <View style={styles.container}>
@@ -66,13 +65,13 @@ export default class TodoList extends React.Component {
                         <AntDesign name="plus" size={16} color={COLORS.Blue} />
                     </TouchableOpacity>
 
-                    <Text style={styles.addLabel}>{LABELS.AddList}</Text>
+                    <Text style={styles.addLabel}>{LABELS.AddTodo}</Text>
                 </View>
 
-                <View style={{ height: 275, paddingLeft: 28 }}>
+                <View style={{ height: 275, paddingLeft: 30 }}>
                     <FlatList
                         data={todoList}
-                        keyExtractor={item => item.name}
+                        keyExtractor={(item, index) => index.toString()}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                         keyboardShouldPersistTaps="always"

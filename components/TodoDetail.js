@@ -1,9 +1,11 @@
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import React, { Component } from 'react'
+import React from 'react'
 import {
     View, Text, SafeAreaView, TouchableOpacity, StyleSheet, FlatList, KeyboardAvoidingView, TextInput
 } from 'react-native';
 import COLORS from '../assets/constants/colors';
+import LABELS from '../assets/languages/en';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class TodoDetail extends React.Component {
     state = {
@@ -47,12 +49,16 @@ export default class TodoDetail extends React.Component {
         )
     }
     render() {
-        const todo = this.props.todo;
+        const { todo, isLoading } = this.props;
         const taskCount = todo.tasks.length;
         const completedCount = todo.tasks.filter(task => task.isCompleted).length;
 
         return (
             <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+                <Spinner
+                    visible={isLoading}
+                    textStyle={{ color: COLORS.White }}
+                />
                 <SafeAreaView style={styles.container}>
                     <TouchableOpacity
                         style={{ position: "absolute", top: 64, right: 32, zIndex: 10 }}
@@ -64,14 +70,14 @@ export default class TodoDetail extends React.Component {
                     <View style={[styles.section, styles.header, { borderBottomColor: todo.color }]}>
                         <View>
                             <Text style={styles.title}>{todo.name}</Text>
-                            <Text style={styles.taskCount}>{`${completedCount} of ${taskCount} Tasks`}</Text>
+                            <Text style={styles.taskCount}>{`${completedCount} ${LABELS.of} ${taskCount} ${LABELS.Tasks}`}</Text>
                         </View>
                     </View>
 
                     <View style={{ flex: 3, alignSelf: "stretch" }}>
                         <FlatList
                             data={todo.tasks}
-                            keyExtractor={item => item.name}
+                            keyExtractor={(item, index) => index.toString()}
                             showsVerticalScrollIndicator={false}
                             renderItem={({ item, index }) => this.renderTaskList(item, index)}
                             contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 64 }}

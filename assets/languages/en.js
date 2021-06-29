@@ -5,10 +5,12 @@
 export default LABELS = {
     Todo: "Todo",
     Lists: "Lists",
-    AddList: "Add List",
+    AddTodo: "Add Todo",
     Remainning: "Remainning",
     Completed: "Completed",
     CreateTodoList: "Create Todo List",
     TodoTitle: "Todo Title",
-    Create: "Create!"
+    Create: "Create!",
+    of: "of",
+    Tasks: "Tasks"
 }

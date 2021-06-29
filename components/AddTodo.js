@@ -43,7 +43,6 @@ export default class AddTodo extends React.Component {
 
     render() {
         const { isLoading } = this.props;
-        console.log('add: ', isLoading);
 
         return (
             <KeyboardAvoidingView style={styles.container}>
