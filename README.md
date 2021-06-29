@@ -1,6 +1,9 @@
 TodoAppByK
 ======================================================
 
+## How does TodoAppByK look like?
+![alt text](https://media.giphy.com/media/L1BLqfC4ZWXmmiXkVG/giphy.gif)
+
 ## Description
 TodoAppByK is a mini repository for showing the process of how I study React Native. This one will be updated whenever I study new things about React Native.
 
