@@ -28,7 +28,7 @@ $ cd TodoAppByK
 $ npm install
 ```
 
-## Development
+## Running
 
 ```
 // For IOS
