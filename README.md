@@ -18,7 +18,7 @@ Basic functionality includes:
 ```
 
 ## Technologies
-Some technologies are used in this repo. It will be updated during my study.
+Some technologies are used in this repo.
 ```
   axios: ^0.21.1,
   expo: ~41.0.1,
