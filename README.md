@@ -5,7 +5,7 @@ TodoAppByK
 ![alt text](https://media.giphy.com/media/L1BLqfC4ZWXmmiXkVG/giphy.gif)
 
 ## Description
-TodoAppByK is a basic todo app built in React Native using Redux. It's also a repository for showing the process of how I study React Native. This one will be updated whenever I study new things about React Native.
+TodoAppByK is a basic todo app built in React Native using Redux. It's also a repository for showing the process of how I study React Native.
 
 ## Features
 Basic functionality includes:
