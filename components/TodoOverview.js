@@ -1,72 +1,64 @@
-import React from 'react';
-import TodoDetailContainer from '../redux/containers/todoDetailContainer';
+import React, { useState } from 'react';
+import TodoDetail from './todoDetail';
 import { AntDesign } from '@expo/vector-icons';
 import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
 
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
 
-export default class TodoOverview extends React.Component {
-    state = {
-        isShowTaskList: false
+export default function TodoOverview(props) {
+    const [showTaskList, setShowTaskList] = useState(false)
+    const { todo } = props;
+
+    toggleShowTaskList = () => {
+        setShowTaskList(!showTaskList);
     }
 
-    toggleShowTaskList() {
-        this.setState({
-            isShowTaskList: !this.state.isShowTaskList
-        })
-    }
+    const completedCount = todo.tasks.filter(task => task.isCompleted).length;
+    const remainningCount = todo.tasks.length - completedCount;
 
-    //onClickDelete = (id) => (event) => this.props.deleteTodo(id);
+    return (
+        <View>
+            <Modal animationType="slide"
+                visible={showTaskList}
+                onRequestClose={() => toggleShowTaskList()}
+            >
+                <TodoDetail
+                    todo={todo}
+                    closeModal={() => toggleShowTaskList()}
+                />
+            </Modal>
 
-    render() {
-        const { todo } = this.props;
-        const completedCount = todo.tasks.filter(task => task.isCompleted).length;
-        const remainningCount = todo.tasks.length - completedCount;
+            <TouchableOpacity style={[styles.listContainer, { backgroundColor: todo.color }]}
+                onPress={() => toggleShowTaskList()}
+            >
+                <View style={{
+                    position: 'absolute',
+                    right: 15,
+                    top: 15
+                }}>
+                    <TouchableOpacity onPress={() => { props.deleteTodo(todo.id) }}>
+                        <AntDesign name="close" size={24} color={COLORS.White} />
+                    </TouchableOpacity>
+                </View>
 
-        return (
-            <View>
-                <Modal animationType="slide"
-                    visible={this.state.isShowTaskList}
-                    onRequestClose={() => this.toggleShowTaskList()}
-                >
-                    <TodoDetailContainer
-                        todo={todo}
-                        closeModal={() => this.toggleShowTaskList()}
-                    />
-                </Modal>
+                <Text style={styles.listTitle} numberOfLines={1}>
+                    {todo.name}
+                </Text>
 
-                <TouchableOpacity style={[styles.listContainer, { backgroundColor: todo.color }]}
-                    onPress={() => this.toggleShowTaskList()}
-                >
-                    <View style={{
-                        position: 'absolute',
-                        right: 15,
-                        top: 15
-                    }}>
-                        <TouchableOpacity onPress={() => { this.props.deleteTodo(todo.id) }}>
-                            <AntDesign name="close" size={24} color={COLORS.White} />
-                        </TouchableOpacity>
+                <View style={{ marginTop: 15 }}>
+                    <View style={{ alignItems: "center", marginBottom: 10 }}>
+                        <Text style={styles.count}>{completedCount}</Text>
+                        <Text style={styles.subTitle}>{LABELS.Completed}</Text>
                     </View>
-
-                    <Text style={styles.listTitle} numberOfLines={1}>
-                        {todo.name}
-                    </Text>
-
-                    <View style={{ marginTop: 15 }}>
-                        <View style={{ alignItems: "center", marginBottom: 10 }}>
-                            <Text style={styles.count}>{completedCount}</Text>
-                            <Text style={styles.subTitle}>{LABELS.Completed}</Text>
-                        </View>
-                        <View style={{ alignItems: "center" }}>
-                            <Text style={styles.count}>{remainningCount}</Text>
-                            <Text style={styles.subTitle}>{LABELS.Remainning}</Text>
-                        </View>
+                    <View style={{ alignItems: "center" }}>
+                        <Text style={styles.count}>{remainningCount}</Text>
+                        <Text style={styles.subTitle}>{LABELS.Remainning}</Text>
                     </View>
-                </TouchableOpacity>
-            </View>
-        )
-    }
+                </View>
+            </TouchableOpacity>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({

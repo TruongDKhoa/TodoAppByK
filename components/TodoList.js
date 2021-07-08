@@ -1,87 +1,93 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { actGetTodoListsRequest, actDeleteTodoRequest } from '../redux/actions/todoAction';
+
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, Modal, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import TodoOverview from './todoOverview';
-import AddTodoContainer from '../redux/containers/addTodoContainer';
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export default class TodoList extends React.Component {
-    state = {
-        addTodoVisible: false
-    }
+import TodoOverview from './todoOverview';
+import AddToDo from './addTodo';
 
-    componentDidMount() {
-        // Get todo list
-        this.props.getTodoList();
-    }
+export default function TodoList() {
+    // Get selector from TodoReducer
+    const todoList = useSelector(state => state.TodoReducer.data);
+    const isLoading = useSelector(state => state.TodoReducer.isLoading);
+    // Use for all the dispatch actions
+    const dispatch = useDispatch();
+
+    const [visibleAdd, setVisibleAdd] = useState(false);
+
+    useEffect(() => {
+        dispatch(actGetTodoListsRequest());
+    }, [])
+    // componentDidMount() {
+    //     // Get todo list
+    //     this.props.getTodoList();
+    // }
 
     // Delete a todo
     onDeleteTodo = (id) => {
-        this.props.deleteTodo(id);
+        dispatch(actDeleteTodoRequest(id));
     }
 
     // Show/hide new todo screen
-    onToggleAddTodoModal() {
-        this.setState({
-            addTodoVisible: !this.state.addTodoVisible
-        })
+    onToggleAddTodoModal = () => {
+        setVisibleAdd(!visibleAdd);
     }
 
     // Render todo overview list
-    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} deleteTodo={this.onDeleteTodo} />;
+    renderTodoOverviewList = (todo) => <TodoOverview todo={todo} deleteTodo={onDeleteTodo} />;
 
-    render() {
-        const { todoList, isLoading } = this.props;
+    return (
+        <View style={styles.container}>
+            <Spinner
+                visible={isLoading}
+                textStyle={{ color: COLORS.White }}
+            />
 
-        return (
-            <View style={styles.container}>
-                <Spinner
-                    visible={isLoading}
-                    textStyle={{ color: COLORS.White }}
-                />
+            <Modal animationType="slide"
+                visible={visibleAdd}
+                tranparent={true}
+                onRequestClose={() => onToggleAddTodoModal()}
+            >
+                <AddToDo closeModal={() => onToggleAddTodoModal()} />
+            </Modal>
 
-                <Modal animationType="slide"
-                    visible={this.state.addTodoVisible}
-                    tranparent={true}
-                    onRequestClose={() => this.onToggleAddTodoModal()}
-                >
-                    <AddTodoContainer closeModal={() => this.onToggleAddTodoModal()} />
-                </Modal>
-
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={styles.divider} />
-                    <Text style={styles.title}>
-                        {LABELS.Todo} <Text style={{ fontWeight: "300", color: COLORS.Blue }}>{LABELS.Lists}</Text>
-                    </Text>
-                    <View style={styles.divider} />
-                </View>
-
-                <View style={{ marginVertical: 40 }}>
-                    <TouchableOpacity style={styles.addListButton}
-                        onPress={() => this.onToggleAddTodoModal()}
-                    >
-                        <AntDesign name="plus" size={16} color={COLORS.Blue} />
-                    </TouchableOpacity>
-
-                    <Text style={styles.addLabel}>{LABELS.AddTodo}</Text>
-                </View>
-
-                <View style={{ height: 275, paddingLeft: 30 }}>
-                    <FlatList
-                        data={todoList}
-                        keyExtractor={(item, index) => index.toString()}
-                        horizontal={true}
-                        showsHorizontalScrollIndicator={false}
-                        keyboardShouldPersistTaps="always"
-                        renderItem={({ item }) => this.renderTodoOverviewList(item)}
-                    />
-                </View>
+            <View style={{ flexDirection: 'row' }}>
+                <View style={styles.divider} />
+                <Text style={styles.title}>
+                    {LABELS.Todo} <Text style={{ fontWeight: "300", color: COLORS.Blue }}>{LABELS.Lists}</Text>
+                </Text>
+                <View style={styles.divider} />
             </View>
-        );
-    }
+
+            <View style={{ marginVertical: 40 }}>
+                <TouchableOpacity style={styles.addListButton}
+                    onPress={() => onToggleAddTodoModal()}
+                >
+                    <AntDesign name="plus" size={16} color={COLORS.Blue} />
+                </TouchableOpacity>
+
+                <Text style={styles.addLabel}>{LABELS.AddTodo}</Text>
+            </View>
+
+            <View style={{ height: 275, paddingLeft: 30 }}>
+                <FlatList
+                    data={todoList}
+                    keyExtractor={(item, index) => index.toString()}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    keyboardShouldPersistTaps="always"
+                    renderItem={({ item }) => renderTodoOverviewList(item)}
+                />
+            </View>
+        </View>
+    );
 }
+
 
 const styles = StyleSheet.create({
     container: {

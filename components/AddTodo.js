@@ -1,82 +1,83 @@
 
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+
 import { AntDesign } from '@expo/vector-icons';
 import { KeyboardAvoidingView, TouchableOpacity, StyleSheet, View, Text, TextInput } from 'react-native'
 import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export default class AddTodo extends React.Component {
-    // Color list to set for a todo list
-    backgroundColor = ["#5CD859", "#24A6D9", "#595BD9", "#8022D9", "#D159D8", "#D85963", "#D88559"]
+import { actAddNewTodoRequest } from '../redux/actions/todoAction';
 
-    state = {
-        name: "",
-        mainColor: this.backgroundColor[0]
-    }
+export default function AddTodo(props) {
+    // Color list to set for a todo list
+    backgroundColor = ["#5CD859", "#24A6D9", "#595BD9", "#8022D9", "#D159D8", "#D85963", "#D88559"];
+
+    const todoList = useSelector(state => state.TodoReducer.data);
+    const isLoading = useSelector(state => state.TodoReducer.isLoading);
+    const dispatch = useDispatch();
+
+    const [name, setName] = useState('');
+    const [mainColor, setMainColor] = useState(backgroundColor[0]);
 
     // Render maincolor list to UI.
-    renderColorList() {
-        return this.backgroundColor.map((color, index) => {
+    renderColorList = () => {
+        return backgroundColor.map((color, index) => {
             return <TouchableOpacity
                 key={index}
                 style={[styles.colorSelect, { backgroundColor: color }]}
-                onPress={() => { this.setState({ mainColor: color }) }}
+                onPress={() => { setMainColor(color) }}
             ></TouchableOpacity>
         })
     }
 
     // Create a new Todo
     createTodo = async () => {
-        const { name, mainColor } = this.state;
         // Add to Todo List.
         const todo = { name, mainColor };
 
         // Dispatch action Add Todo
-        await this.props.addNewTodo(todo)
+        await dispatch(actAddNewTodoRequest(todo))
 
         // Reset Todo Title
-        this.setState({ name: "" });
+        setName('');
         // Close modal and back to Overview screen.
-        this.props.closeModal();
+        props.closeModal();
     }
 
-    render() {
-        const { isLoading } = this.props;
+    return (
+        <KeyboardAvoidingView style={styles.container}>
+            <Spinner
+                visible={isLoading}
+                textStyle={{ color: COLORS.White }}
+            />
 
-        return (
-            <KeyboardAvoidingView style={styles.container}>
-                <Spinner
-                    visible={isLoading}
-                    textStyle={{ color: COLORS.White }}
+            <TouchableOpacity style={styles.xButton}
+                onPress={props.closeModal}
+            >
+                <AntDesign name="close" size={24} color={COLORS.Black} />
+            </TouchableOpacity>
+
+            <View style={{ alignSelf: "stretch", marginHorizontal: 32 }}>
+                <Text style={styles.title}>{LABELS.CreateTodoList}</Text>
+
+                <TextInput style={[styles.input, { borderColor: mainColor }]}
+                    placeholder={LABELS.TodoTitle}
+                    value={name}
+                    onChangeText={(text) => setName(text)}
                 />
 
-                <TouchableOpacity style={styles.xButton}
-                    onPress={this.props.closeModal}
+                <View style={styles.colorContainer}>{renderColorList()}</View>
+
+                <TouchableOpacity style={[styles.createButton, { backgroundColor: mainColor }]}
+                    onPress={() => createTodo()}
                 >
-                    <AntDesign name="close" size={24} color={COLORS.Black} />
+                    <Text style={{ color: COLORS.White, fontWeight: "700", fontSize: 16 }}>{LABELS.Create}</Text>
                 </TouchableOpacity>
-
-                <View style={{ alignSelf: "stretch", marginHorizontal: 32 }}>
-                    <Text style={styles.title}>{LABELS.CreateTodoList}</Text>
-
-                    <TextInput style={[styles.input, { borderColor: this.state.mainColor }]}
-                        placeholder={LABELS.TodoTitle}
-                        value={this.state.name}
-                        onChangeText={(text) => this.setState({ name: text })}
-                    />
-
-                    <View style={styles.colorContainer}>{this.renderColorList()}</View>
-
-                    <TouchableOpacity style={[styles.createButton, { backgroundColor: this.state.mainColor }]}
-                        onPress={() => this.createTodo()}
-                    >
-                        <Text style={{ color: COLORS.White, fontWeight: "700", fontSize: 16 }}>{LABELS.Create}</Text>
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
-        )
-    }
+            </View>
+        </KeyboardAvoidingView>
+    )
 }
 
 const styles = StyleSheet.create({

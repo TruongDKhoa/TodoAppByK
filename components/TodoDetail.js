@@ -1,5 +1,7 @@
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import React from 'react'
 import {
     View, Text, SafeAreaView, TouchableOpacity, StyleSheet, FlatList, KeyboardAvoidingView, TextInput
 } from 'react-native';
@@ -7,34 +9,39 @@ import COLORS from '../assets/constants/colors';
 import LABELS from '../assets/languages/en';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-export default class TodoDetail extends React.Component {
-    state = {
-        newTask: "",
-    }
+import { actUpdateTodoRequest } from '../redux/actions/todoAction';
+
+export default function TodoDetail(props) {
+    const isLoading = useSelector(state => state.TodoReducer.isLoading);
+    const todo = useSelector(state => state.TodoReducer.todo ? state.TodoReducer.todo : props.todo);
+    const dispatch = useDispatch();
+
+    const [newTask, setNewTask] = useState('')
 
     // Check/Uncheck task to mark it is completed or not
     onToggleTaskCompleted = index => {
-        let todo = this.props.todo;
         todo.tasks[index].isCompleted = !todo.tasks[index].isCompleted;
+
         // Request Update Todo
-        this.props.updateTodo(todo.id, todo);
+        dispatch(actUpdateTodoRequest(todo.id, todo));
     }
 
     // Create new task and add to
     onAddNewTask = async () => {
-        let todo = this.props.todo;
-        todo.tasks.push({ title: this.state.newTask, isCompleted: false });
+        todo.tasks.push({ title: newTask, isCompleted: false });
 
         // Request Update Todo
-        await this.props.updateTodo(todo.id, todo);
-        this.setState({ newTask: "" })
+        await dispatch(actUpdateTodoRequest(todo.id, todo));
+
+        // Reset input
+        setNewTask('');
     }
 
     renderTaskList = (task, index) => {
         return (
             <View style={styles.taskContainer}>
-                <TouchableOpacity onPress={() => this.onToggleTaskCompleted(index)}>
-                    <Ionicons name={task.isCompleted ? "ios-square" : "ios-square-outline"} size={24} color={this.props.todo.color} style={{ width: 32 }} />
+                <TouchableOpacity onPress={() => onToggleTaskCompleted(index)}>
+                    <Ionicons name={task.isCompleted ? "ios-square" : "ios-square-outline"} size={24} color={todo.color} style={{ width: 32 }} />
                 </TouchableOpacity>
                 <Text style={[
                     styles.task,
@@ -48,62 +55,59 @@ export default class TodoDetail extends React.Component {
             </View>
         )
     }
-    render() {
-        const { todo, isLoading } = this.props;
-        const taskCount = todo.tasks.length;
-        const completedCount = todo.tasks.filter(task => task.isCompleted).length;
+    const taskCount = todo.tasks.length;
+    const completedCount = todo.tasks.filter(task => task.isCompleted).length;
 
-        return (
-            <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
-                <Spinner
-                    visible={isLoading}
-                    textStyle={{ color: COLORS.White }}
-                />
-                <SafeAreaView style={styles.container}>
+    return (
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+            <Spinner
+                visible={isLoading}
+                textStyle={{ color: COLORS.White }}
+            />
+            <SafeAreaView style={styles.container}>
+                <TouchableOpacity
+                    style={{ position: "absolute", top: 64, right: 32, zIndex: 10 }}
+                    onPress={props.closeModal}
+                >
+                    <AntDesign name="close" size={24} color={COLORS.Black}></AntDesign>
+                </TouchableOpacity>
+
+                <View style={[styles.section, styles.header, { borderBottomColor: todo.color }]}>
+                    <View>
+                        <Text style={styles.title}>{todo.name}</Text>
+                        <Text style={styles.taskCount}>{`${completedCount} ${LABELS.of} ${taskCount} ${LABELS.Tasks}`}</Text>
+                    </View>
+                </View>
+
+                <View style={{ flex: 3, alignSelf: "stretch" }}>
+                    <FlatList
+                        data={todo.tasks}
+                        keyExtractor={(item, index) => index.toString()}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({ item, index }) => renderTaskList(item, index)}
+                        contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 64 }}
+                    ></FlatList>
+                </View>
+
+                <View
+                    style={[styles.footer, { flex: 1 }]}
+                    behavior="padding"
+                >
+                    <TextInput
+                        style={[styles.input, { borderColor: todo.color }]}
+                        onChangeText={text => setNewTask(text)}
+                        value={newTask}
+                    />
                     <TouchableOpacity
-                        style={{ position: "absolute", top: 64, right: 32, zIndex: 10 }}
-                        onPress={this.props.closeModal}
+                        style={[styles.addTask, { backgroundColor: todo.color }]}
+                        onPress={() => onAddNewTask()}
                     >
-                        <AntDesign name="close" size={24} color={COLORS.Black}></AntDesign>
+                        <AntDesign name="plus" size={16} color={COLORS.White} />
                     </TouchableOpacity>
-
-                    <View style={[styles.section, styles.header, { borderBottomColor: todo.color }]}>
-                        <View>
-                            <Text style={styles.title}>{todo.name}</Text>
-                            <Text style={styles.taskCount}>{`${completedCount} ${LABELS.of} ${taskCount} ${LABELS.Tasks}`}</Text>
-                        </View>
-                    </View>
-
-                    <View style={{ flex: 3, alignSelf: "stretch" }}>
-                        <FlatList
-                            data={todo.tasks}
-                            keyExtractor={(item, index) => index.toString()}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({ item, index }) => this.renderTaskList(item, index)}
-                            contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 64 }}
-                        ></FlatList>
-                    </View>
-
-                    <View
-                        style={[styles.footer, { flex: 1 }]}
-                        behavior="padding"
-                    >
-                        <TextInput
-                            style={[styles.input, { borderColor: todo.color }]}
-                            onChangeText={text => this.setState({ newTask: text })}
-                            value={this.state.newTask}
-                        />
-                        <TouchableOpacity
-                            style={[styles.addTask, { backgroundColor: todo.color }]}
-                            onPress={() => this.onAddNewTask()}
-                        >
-                            <AntDesign name="plus" size={16} color={COLORS.White} />
-                        </TouchableOpacity>
-                    </View>
-                </SafeAreaView>
-            </KeyboardAvoidingView>
-        )
-    }
+                </View>
+            </SafeAreaView>
+        </KeyboardAvoidingView>
+    )
 }
 
 const styles = StyleSheet.create({
